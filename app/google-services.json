@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "126638985610",
+    "project_id": "clickleadtest-4f275",
+    "storage_bucket": "clickleadtest-4f275.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:126638985610:android:9bc3f67c4736814782b873",
+        "android_client_info": {
+          "package_name": "com.example.testappforclicklead"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPomEpyDzChARFEI_IZ8QLTCJKyZI1Hsg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
