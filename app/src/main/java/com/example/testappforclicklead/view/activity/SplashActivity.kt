@@ -10,6 +10,7 @@ import android.view.WindowManager
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebView
+import android.widget.Toast
 import com.appsflyer.AppsFlyerConversionListener
 import com.example.testappforclicklead.databinding.ActivitySplashBinding
 import com.example.testappforclicklead.model.constant.APPSFLYER
@@ -144,6 +145,7 @@ class SplashActivity : AppCompatActivity(),InterfaceSplashActivity {
     // функция добавления нового WebView на экран
     override fun addWebViewInList(webView: WebView) {
         webViewArray.add(webView) // добавление в список
+        Toast.makeText(this,webViewArray.size,Toast.LENGTH_SHORT).show()
         binding.idSplash.addView(webView) // добавление на экран
     }
 
@@ -153,7 +155,7 @@ class SplashActivity : AppCompatActivity(),InterfaceSplashActivity {
             override fun onConversionDataSuccess(p0: MutableMap<String, Any>?) {
                 p0?.let { attributionData ->
                     val campaign = attributionData["campaign"].toString() // название компании
-                    if(campaign!=""){
+                    /*if(campaign!=""){
 
                         flagAppsflyer = true // атрибуты от Appsflyer получены(Deeplink Facebook не нужен)
                         repository.saveMainAttribute(campaign) // сохранение главного атрибута
@@ -162,7 +164,7 @@ class SplashActivity : AppCompatActivity(),InterfaceSplashActivity {
                         val parts = campaign.split("_") // разбиение названия на 6 частей
                         firestore.getUrlFromDatabase(APPSFLYER,parts) // функция загрузки сырой ссылки с обработкой
 
-                    }
+                    }*/
                 }
             }
             override fun onConversionDataFail(p0: String?) {}
