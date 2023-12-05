@@ -28,7 +28,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
 
+            <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
                 <data
                     android:host="your-deep-link-host"

@@ -13,6 +13,7 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
+import android.widget.Toast
 import com.example.testappforclicklead.model.repository.Repository
 import com.example.testappforclicklead.view.interfaceView.InterfaceSplashActivity
 
@@ -32,11 +33,11 @@ class CreatorWebView(private val interfaceActivity:InterfaceSplashActivity, priv
     }
 
     // функция установки настроек к созданному WebView
-    @SuppressLint("SetJavaScriptEnabled")
     private fun setSettingsForWebView(webView:WebView):WebView{
 
         var webSettings = webView.settings
         webSettings.javaScriptEnabled = true
+        webSettings.setSupportMultipleWindows(true)
         webSettings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
         webSettings.layoutAlgorithm = WebSettings.LayoutAlgorithm.NORMAL
         webSettings.loadWithOverviewMode = true
@@ -138,14 +139,15 @@ class CreatorWebView(private val interfaceActivity:InterfaceSplashActivity, priv
                 isUserGesture: Boolean,
                 resultMsg: Message?
             ): Boolean {
-                var newWebView = WebView(view?.context!!)
+                Toast.makeText(context,"новое окно",Toast.LENGTH_SHORT).show()
+                /*var newWebView = WebView(view?.context!!)
                 newWebView = setSettingsForWebView(newWebView)
                 newWebView.loadUrl(repository.getLastUrl()) // добавление последней ссылки
                 interfaceActivity.addWebViewInList(newWebView) // добавление нового WebView на экран и в список WebView
 
                 val transport = resultMsg?.obj as WebView.WebViewTransport
                 transport.webView = newWebView
-                resultMsg.sendToTarget()
+                resultMsg.sendToTarget()*/
 
                 return true
             }
