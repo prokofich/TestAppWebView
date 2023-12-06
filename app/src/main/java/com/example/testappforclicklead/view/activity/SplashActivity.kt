@@ -73,6 +73,7 @@ class SplashActivity : AppCompatActivity(),InterfaceSplashActivity {
             // действия при повторном запуске приложения
             webView = creatorWebView.createWebView() //создание WebView
             loadUrlInWebView(repository.getLastUrl()) // открытие последней ссылки при повторном запуске приложения
+            webViewArray.add(webView) // добавление WebView в список
         }
 
     }
@@ -80,6 +81,7 @@ class SplashActivity : AppCompatActivity(),InterfaceSplashActivity {
     //функция добавления ссылки к WebView
     private fun loadUrlInWebView(url:String){
         webView.loadUrl(url) //добавление ссылки к WebView
+        webViewArray.add(webView)
         binding.idSplash.addView(webView) //добавление созданного WebView на экран
     }
 
@@ -105,16 +107,17 @@ class SplashActivity : AppCompatActivity(),InterfaceSplashActivity {
     @Deprecated("Deprecated in Java")
     @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
-        val currentWebView = webViewArray.lastOrNull()
+        val currentWebView = webViewArray.lastOrNull() // текущий WebView
         if (webViewArray.size > 1) {
-            val index = webViewArray.indexOf(currentWebView)
-            webViewArray.removeAt(index) // удаляем последний WebView из списка
-            binding.idSplash.removeView(currentWebView) // удаляем WebView с экрана
-
-            val previousWebView = webViewArray.last()
-            binding.idSplash.addView(previousWebView) // показываем на экране предыдущий WebView
+            if (currentWebView!!.canGoBack()) {
+                currentWebView.goBack() // переход по ссылке назад в текущем WebView
+            }else{
+                val index = webViewArray.indexOf(currentWebView)
+                webViewArray.removeAt(index) // удаляем текущий WebView из списка
+                binding.idSplash.removeView(currentWebView) // удаляем текущий WebView с экрана
+            }
         } else {
-            super.onBackPressed()
+            super.onBackPressed() // закрытие приложения,если ссылок и WebView не осталось
         }
     }
 
@@ -142,11 +145,12 @@ class SplashActivity : AppCompatActivity(),InterfaceSplashActivity {
         startActivity(Intent(this,MainActivity::class.java))
     }
 
-    // функция добавления нового WebView на экран
-    override fun addWebViewInList(webView: WebView) {
-        webViewArray.add(webView) // добавление в список
-        Toast.makeText(this,webViewArray.size,Toast.LENGTH_SHORT).show()
-        binding.idSplash.addView(webView) // добавление на экран
+    // функция показа нового окна
+    override fun showNewWindow(url: String) {
+        val newWebView = creatorWebView.createWebView()
+        newWebView.loadUrl(url)
+        webViewArray.add(newWebView)
+        binding.idSplash.addView(newWebView)
     }
 
     // функция получения атрибутов от Appsflyer
@@ -155,7 +159,7 @@ class SplashActivity : AppCompatActivity(),InterfaceSplashActivity {
             override fun onConversionDataSuccess(p0: MutableMap<String, Any>?) {
                 p0?.let { attributionData ->
                     val campaign = attributionData["campaign"].toString() // название компании
-                    /*if(campaign!=""){
+                    if(campaign!=""){
 
                         flagAppsflyer = true // атрибуты от Appsflyer получены(Deeplink Facebook не нужен)
                         repository.saveMainAttribute(campaign) // сохранение главного атрибута
@@ -164,7 +168,7 @@ class SplashActivity : AppCompatActivity(),InterfaceSplashActivity {
                         val parts = campaign.split("_") // разбиение названия на 6 частей
                         firestore.getUrlFromDatabase(APPSFLYER,parts) // функция загрузки сырой ссылки с обработкой
 
-                    }*/
+                    }
                 }
             }
             override fun onConversionDataFail(p0: String?) {}

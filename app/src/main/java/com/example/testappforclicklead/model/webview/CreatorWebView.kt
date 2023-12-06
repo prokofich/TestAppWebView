@@ -1,6 +1,5 @@
 package com.example.testappforclicklead.model.webview
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.os.Message
@@ -139,16 +138,10 @@ class CreatorWebView(private val interfaceActivity:InterfaceSplashActivity, priv
                 isUserGesture: Boolean,
                 resultMsg: Message?
             ): Boolean {
-                Toast.makeText(context,"новое окно",Toast.LENGTH_SHORT).show()
-                /*var newWebView = WebView(view?.context!!)
-                newWebView = setSettingsForWebView(newWebView)
-                newWebView.loadUrl(repository.getLastUrl()) // добавление последней ссылки
-                interfaceActivity.addWebViewInList(newWebView) // добавление нового WebView на экран и в список WebView
-
-                val transport = resultMsg?.obj as WebView.WebViewTransport
-                transport.webView = newWebView
-                resultMsg.sendToTarget()*/
-
+                val href = view!!.handler.obtainMessage()
+                view.requestFocusNodeHref(href)
+                val url = href.data.getString("url") // получение url адреса для нового окна
+                interfaceActivity.showNewWindow(url!!) // открытие нового окна
                 return true
             }
 
