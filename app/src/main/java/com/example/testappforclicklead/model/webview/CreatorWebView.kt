@@ -35,20 +35,19 @@ class CreatorWebView(private val interfaceActivity:InterfaceSplashActivity, priv
     private fun setSettingsForWebView(webView:WebView):WebView{
 
         var webSettings = webView.settings
-        webSettings.javaScriptEnabled = true
-        webSettings.setSupportMultipleWindows(true)
-        webSettings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
-        webSettings.layoutAlgorithm = WebSettings.LayoutAlgorithm.NORMAL
-        webSettings.loadWithOverviewMode = true
-        webSettings.useWideViewPort = true
-        webSettings.domStorageEnabled = true
-        webSettings.cacheMode = WebSettings.LOAD_DEFAULT
-        webSettings.databaseEnabled = true
-        webSettings.databasePath = context.getDir("webview_databases", 0).path
-        webSettings.allowFileAccess = true
-        webSettings.mediaPlaybackRequiresUserGesture = false
-        webSettings.loadsImagesAutomatically = true
-        webSettings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+        webSettings.javaScriptEnabled = true // разрешает выполнение JavaScript в WebView
+        webSettings.setSupportMultipleWindows(true) // разрешает открытие новых окон в WEbView
+        webSettings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW // разрешает загрузку смешанного контента
+        webSettings.layoutAlgorithm = WebSettings.LayoutAlgorithm.NORMAL // отображение страницы в соответствии с обычными правилами макета
+        webSettings.loadWithOverviewMode = true // загрузка контента в соответствии с размерами экрана
+        webSettings.useWideViewPort = true // правильное масштабирование
+        webSettings.domStorageEnabled = true // разрешает использование DOM Storage для сохранения данных в локальном хранилище
+        webSettings.cacheMode = WebSettings.LOAD_DEFAULT // использовать кеш по умолчанию
+        webSettings.databaseEnabled = true // разрешает использование базы данных для хранения данных
+        webSettings.databasePath = context.getDir("webview_databases", 0).path // устанавливает путь к базе данных для WebView
+        webSettings.allowFileAccess = true // разрешает загрузку файлов из локального хранилища
+        webSettings.mediaPlaybackRequiresUserGesture = false // разрешение воспроизведения видео/аудио по умолчанию
+        webSettings.loadsImagesAutomatically = true // разрешает загрузку изображений по умолчанию
 
         webView.webViewClient = object : WebViewClient() {
             @Deprecated("Deprecated in Java")
