@@ -3,8 +3,6 @@ package com.example.testappforclicklead.model.databaseFirestore
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import com.example.testappforclicklead.model.constant.APPSFLYER
-import com.example.testappforclicklead.model.constant.DEEPLINK_FACEBOOK
 import com.example.testappforclicklead.model.constant.NOT_ORGANIC_INSTALL
 import com.example.testappforclicklead.model.constant.ORGANIC_INSTALL
 import com.example.testappforclicklead.model.repository.Repository

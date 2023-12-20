@@ -1,19 +1,20 @@
 package com.example.testappforclicklead.view.activity
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.WindowManager
+import android.provider.Settings
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebView
-import android.widget.Toast
-import com.appsflyer.AppsFlyerConversionListener
+import com.amplitude.android.Amplitude
+import com.amplitude.android.Configuration
 import com.example.testappforclicklead.databinding.ActivitySplashBinding
-import com.example.testappforclicklead.model.constant.APPSFLYER
+import com.example.testappforclicklead.model.constant.AMPLITUDE_API_KEY
 import com.example.testappforclicklead.model.constant.DEEPLINK_FACEBOOK
 import com.example.testappforclicklead.model.constant.NOT_ORGANIC_INSTALL
 import com.example.testappforclicklead.model.constant.ORGANIC_INSTALL
@@ -35,14 +36,14 @@ class SplashActivity : AppCompatActivity(),InterfaceSplashActivity {
     private lateinit var repository: Repository
     private lateinit var firestore:Firestore
     private lateinit var creatorWebView: CreatorWebView
+    private lateinit var clientAmplitude: Amplitude
 
     private val webViewArray = mutableListOf<WebView>()
-    private var jobTime:Job = Job() // таймер для проверки органической установки
+    private var jobTime:Job = Job()
 
     private var fileUploadCallback: ValueCallback<Array<Uri>>? = null
     private val fileChooserResultCode = 1
 
-    private var flagAppsflyer = false        // проверка были ли получены данные из Appsflyer(по умолчанию не получены)
     private var flagDeeplinkFacebook = false // проверка были ли получены данные из Deeplink Facebook(по умолчанию не получены)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,6 +51,14 @@ class SplashActivity : AppCompatActivity(),InterfaceSplashActivity {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        // проверка на модератора
+        if(Settings.Global.getInt(applicationContext.contentResolver,"adb_enabled",0)==1){
+            goToWhiteScreen() // переход на заглушку
+        }
+
+        // инициализация Amplitude
+        clientAmplitude = Amplitude(Configuration(AMPLITUDE_API_KEY,applicationContext))
 
         firestore = Firestore(this,this)
         repository = Repository(this)
@@ -62,11 +71,8 @@ class SplashActivity : AppCompatActivity(),InterfaceSplashActivity {
 
         //проверка первого запуска приложения
         if(repository.checkFirstStartApplication()){
-
             repository.updateCountStartApplication() // обновление количества запусков приложения
             webView = creatorWebView.createWebView() // создание WebView
-
-            getAttributeFromAppsflyer() // получение атрибутов от Appsflyer
             getAttributeFromDeeplinkFacebook() // получение атрибутов от Deeplink Facebook
             checkOrganicInstall() // проверка органической установки
         }else{
@@ -153,47 +159,21 @@ class SplashActivity : AppCompatActivity(),InterfaceSplashActivity {
         binding.idSplash.addView(newWebView)
     }
 
-    // функция получения атрибутов от Appsflyer
-    private fun getAttributeFromAppsflyer(){
-        val conversionListener = object : AppsFlyerConversionListener {
-            override fun onConversionDataSuccess(p0: MutableMap<String, Any>?) {
-                p0?.let { attributionData ->
-                    val campaign = attributionData["campaign"].toString() // название компании
-                    if(campaign!=""){
-
-                        flagAppsflyer = true // атрибуты от Appsflyer получены(Deeplink Facebook не нужен)
-                        repository.saveMainAttribute(campaign) // сохранение главного атрибута
-                        repository.saveStatusInstallation(NOT_ORGANIC_INSTALL) // сохранение статуса неорганическая установка
-
-                        val parts = campaign.split("_") // разбиение названия на 6 частей
-                        firestore.getUrlFromDatabase(APPSFLYER,parts) // функция загрузки сырой ссылки с обработкой
-
-                    }
-                }
-            }
-            override fun onConversionDataFail(p0: String?) {}
-            override fun onAppOpenAttribution(p0: MutableMap<String, String>?) {}
-            override fun onAttributionFailure(p0: String?) {}
-        }
-    }
-
     // функция получения атрибутов из Deeplink Facebook
     private fun getAttributeFromDeeplinkFacebook(){
-        if(!flagAppsflyer){
-            val data: Uri? = intent.data
-            if (data != null) {
-                // Обработка данных, переданных через DeepLink Facebook
-                val campaign: String? = data.getQueryParameter("campaign") // название компании
+        val data: Uri? = intent.data
+        if (data != null) {
+            // Обработка данных, переданных через DeepLink Facebook
+            val campaign: String? = data.getQueryParameter("campaign") // название компании
 
-                if (campaign!=null){
-                    if (campaign!=""){
-                        campaign.removePrefix("app://") // удаление ненужной части
-                        flagDeeplinkFacebook = true
-                        repository.saveStatusInstallation(NOT_ORGANIC_INSTALL) // сохранение статуса неорганическая установка
-                        repository.saveMainAttribute(campaign) // сохранение главного атрибута
-                        val parts = campaign.split("_") // разбиение названия на части
-                        firestore.getUrlFromDatabase(DEEPLINK_FACEBOOK,parts) // загрузка сырой ссылки с обработкой
-                    }
+            if (campaign!=null){
+                if (campaign!=""){
+                    campaign.removePrefix("app://") // удаление ненужной части
+                    flagDeeplinkFacebook = true
+                    repository.saveStatusInstallation(NOT_ORGANIC_INSTALL) // сохранение статуса неорганическая установка
+                    repository.saveMainAttribute(campaign) // сохранение главного атрибута
+                    val parts = campaign.split("_") // разбиение названия на части
+                    firestore.getUrlFromDatabase(DEEPLINK_FACEBOOK,parts) // загрузка сырой ссылки с обработкой
                 }
             }
         }
@@ -202,8 +182,8 @@ class SplashActivity : AppCompatActivity(),InterfaceSplashActivity {
     // функция проверки органической установки
     private fun checkOrganicInstall(){
         jobTime = CoroutineScope(Dispatchers.Main).launch {
-            delay(10000) // тайм-аут 10 секунд
-            if(!(flagAppsflyer || flagDeeplinkFacebook)){
+            delay(15000) // тайм-аут 15 секунд
+            if(!(flagDeeplinkFacebook)){
                 repository.saveStatusInstallation(ORGANIC_INSTALL) // сохранение статуса органическая установка, если данные не пришли
                 firestore.getUrlFromDatabase(ORGANIC_INSTALL,null) // загрузка сырой ссылки
             }

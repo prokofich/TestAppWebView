@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -43,11 +44,13 @@ dependencies {
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.10.0")
+    implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
 
     implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
 
@@ -55,9 +58,15 @@ dependencies {
 
     implementation("com.google.firebase:firebase-firestore-ktx")
 
-    implementation("com.appsflyer:af-android-sdk:6.12.1")
     implementation("com.android.installreferrer:installreferrer:2.2")
 
     implementation("com.facebook.android:facebook-login:latest.release")
+
+    implementation("com.onesignal:OneSignal:[4.0.0, 4.99.99]") // подключил OneSignal
+    implementation("com.google.firebase:firebase-crashlytics") // подключил CrashLyrics
+    implementation("com.amplitude:analytics-android:1.+") // подключил Amplitude
+
+
+
 
 }

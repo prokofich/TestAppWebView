@@ -10,6 +10,6 @@ interface InterfaceSplashActivity {
     fun setHorizontalScreen()                        // установка горизонтального режима экрана
     fun setVerticalScreen()                          // установка портретного режима экрана
     fun goToWhiteScreen()                            // переход на заглушку
-    fun showNewWindow(url: String)
+    fun showNewWindow(url: String)                   // показ нового окна
 
 }

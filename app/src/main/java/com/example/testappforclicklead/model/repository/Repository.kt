@@ -4,11 +4,14 @@ package com.example.testappforclicklead.model.repository
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import android.provider.Settings
 import com.example.testappforclicklead.model.constant.COUNT_START_APPLICATION
 import com.example.testappforclicklead.model.constant.LAST_URL_IN_WEB
 import com.example.testappforclicklead.model.constant.MAIN_ATTRIBUTE
 import com.example.testappforclicklead.model.constant.MAIN_URL_IN_WEB
 import com.example.testappforclicklead.model.constant.STATUS_INSTALLATION
+import com.example.testappforclicklead.model.constant.USER_ID
+import java.util.UUID
 
 class Repository(context: Context){
 
@@ -53,17 +56,17 @@ class Repository(context: Context){
 
     //функция получения последнего url адреса
     fun getLastUrl(): String {
-        return sharedPreferences.getString(LAST_URL_IN_WEB,"")!!
+        return sharedPreferences.getString(LAST_URL_IN_WEB,"").toString()
     }
 
     //функция получения главного атрибута
     fun getMainAttribute(): String {
-        return sharedPreferences.getString(MAIN_ATTRIBUTE,"")!!
+        return sharedPreferences.getString(MAIN_ATTRIBUTE,"").toString()
     }
 
     //функция получения первого полученного url адреса
     fun getMainUrl(): String {
-        return sharedPreferences.getString(MAIN_URL_IN_WEB,"")!!
+        return sharedPreferences.getString(MAIN_URL_IN_WEB,"").toString()
     }
 
     //функция получения количества запусков приложения
@@ -74,6 +77,19 @@ class Repository(context: Context){
     //функция проверки первого запуска приложения
     fun checkFirstStartApplication(): Boolean {
         return getCountStartApplication()==0
+    }
+
+    //функция создания кастомного ID юзера для OneSignal
+    fun createAndSaveUserId(){
+        val userId = UUID.randomUUID().toString()
+        sharedPreferences.edit()
+            .putString(USER_ID,userId)
+            .apply()
+    }
+
+    //функция получения кастомного ID юзера
+    fun getUserId():String{
+        return sharedPreferences.getString(USER_ID,"").toString()
     }
 
 }
