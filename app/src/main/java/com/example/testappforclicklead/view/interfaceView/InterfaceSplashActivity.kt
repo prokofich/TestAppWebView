@@ -5,7 +5,7 @@ import android.webkit.WebView
 
 interface InterfaceSplashActivity {
 
-    fun loadUrl(url:String)                          // функция загрузки url адреса,полученного из DatabaseFirestore, для WebView
+    fun loadUrlInWebView(url:String)                 // функция загрузки url адреса,полученного из DatabaseFirestore, для WebView
     fun goActivityForResult(intent: Intent,code:Int) // функция запуска activity
     fun setHorizontalScreen()                        // установка горизонтального режима экрана
     fun setVerticalScreen()                          // установка портретного режима экрана

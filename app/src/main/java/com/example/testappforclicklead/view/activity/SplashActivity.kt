@@ -85,7 +85,7 @@ class SplashActivity : AppCompatActivity(),InterfaceSplashActivity {
     }
 
     //функция добавления ссылки к WebView
-    private fun loadUrlInWebView(url:String){
+    override fun loadUrlInWebView(url:String){
         webView.loadUrl(url) //добавление ссылки к WebView
         webViewArray.add(webView)
         binding.idSplash.addView(webView) //добавление созданного WebView на экран
@@ -125,11 +125,6 @@ class SplashActivity : AppCompatActivity(),InterfaceSplashActivity {
         } else {
             super.onBackPressed() // закрытие приложения,если ссылок и WebView не осталось
         }
-    }
-
-    //функция загрузки url адреса
-    override fun loadUrl(url: String) {
-        loadUrlInWebView(url)
     }
 
     override fun goActivityForResult(intent: Intent, code: Int) {

@@ -33,7 +33,7 @@ class Firestore(private val interfaceActivity:InterfaceSplashActivity, context: 
                                     var newUrl = data["url1"].toString()
                                     repository.saveMainUrl(newUrl)    // сохранение полученной ссылки
                                     repository.saveLastUrl(newUrl)    // сохранение полученной ссылки
-                                    interfaceActivity.loadUrl(newUrl) // загрузка готовой ссылки
+                                    interfaceActivity.loadUrlInWebView(newUrl) // загрузка готовой ссылки
                                 }else{
                                     //была получена пустая ссылка
                                     interfaceActivity.goToWhiteScreen() // переход на заглушку,если ссылка пустая
@@ -55,7 +55,7 @@ class Firestore(private val interfaceActivity:InterfaceSplashActivity, context: 
 
                                     repository.saveMainUrl(newUrl)    // сохранение полученной ссылки
                                     repository.saveLastUrl(newUrl)    // сохранение полученной ссылки
-                                    interfaceActivity.loadUrl(newUrl) // загрузка готовой ссылки
+                                    interfaceActivity.loadUrlInWebView(newUrl) // загрузка готовой ссылки
                                 }else{
                                     // была получена пустая ссылка
                                     interfaceActivity.goToWhiteScreen() // переход на заглушку,если ссылка пустая
