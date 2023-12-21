@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 
 class Firestore(private val interfaceActivity:InterfaceSplashActivity, private val context: Context) {
 
-    private val database = FirebaseFirestore.getInstance()
+    private val database = FirebaseFirestore.getInstance() // доступ к базе данных
 
     private var repository = Repository(context)
 

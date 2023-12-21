@@ -1,8 +1,6 @@
 package com.example.testappforclicklead.application
 
 import android.app.Application
-import com.amplitude.android.Amplitude
-import com.amplitude.android.Configuration
 import com.example.testappforclicklead.model.constant.ONESIGNAL_APP_ID
 import com.example.testappforclicklead.model.repository.Repository
 import com.onesignal.OneSignal

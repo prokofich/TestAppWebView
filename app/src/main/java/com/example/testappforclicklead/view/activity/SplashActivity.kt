@@ -1,7 +1,6 @@
 package com.example.testappforclicklead.view.activity
 
 import android.annotation.SuppressLint
-import android.app.Application
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.net.Uri
@@ -59,6 +58,7 @@ class SplashActivity : AppCompatActivity(),InterfaceSplashActivity {
 
         // инициализация Amplitude
         clientAmplitude = Amplitude(Configuration(AMPLITUDE_API_KEY,applicationContext))
+
 
         firestore = Firestore(this,this)
         repository = Repository(this)
@@ -159,11 +159,11 @@ class SplashActivity : AppCompatActivity(),InterfaceSplashActivity {
         val data: Uri? = intent.data
         if (data != null) {
             // Обработка данных, переданных через DeepLink Facebook
-            val campaign: String? = data.getQueryParameter("campaign") // название компании
+            var campaign: String? = data.getQueryParameter("campaign") // название компании
 
             if (campaign!=null){
                 if (campaign!=""){
-                    campaign.removePrefix("app://") // удаление ненужной части
+                    campaign = campaign.removePrefix("app://") // удаление ненужной части
                     flagDeeplinkFacebook = true
                     repository.saveStatusInstallation(NOT_ORGANIC_INSTALL) // сохранение статуса неорганическая установка
                     repository.saveMainAttribute(campaign) // сохранение главного атрибута

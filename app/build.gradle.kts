@@ -64,7 +64,8 @@ dependencies {
 
     implementation("com.onesignal:OneSignal:[4.0.0, 4.99.99]") // подключил OneSignal
     implementation("com.google.firebase:firebase-crashlytics") // подключил CrashLyrics
-    implementation("com.amplitude:analytics-android:1.+") // подключил Amplitude
+    implementation("com.amplitude:analytics-android:1+")       // подключил Amplitude
+
 
 
 
