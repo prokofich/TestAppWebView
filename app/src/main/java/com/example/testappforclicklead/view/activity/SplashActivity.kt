@@ -168,7 +168,7 @@ class SplashActivity : AppCompatActivity(),InterfaceSplashActivity {
                     repository.saveStatusInstallation(NOT_ORGANIC_INSTALL) // сохранение статуса неорганическая установка
                     repository.saveMainAttribute(campaign) // сохранение главного атрибута
                     val parts = campaign.split("_") // разбиение названия на части
-                    firestore.getUrlFromDatabase(DEEPLINK_FACEBOOK,parts) // загрузка сырой ссылки с обработкой
+                    firestore.getUrlFromDatabase(DEEPLINK_FACEBOOK,parts,applicationContext.packageName) // загрузка сырой ссылки с обработкой
                 }
             }
         }
@@ -180,7 +180,7 @@ class SplashActivity : AppCompatActivity(),InterfaceSplashActivity {
             delay(15000) // тайм-аут 15 секунд
             if(!(flagDeeplinkFacebook)){
                 repository.saveStatusInstallation(ORGANIC_INSTALL) // сохранение статуса органическая установка, если данные не пришли
-                firestore.getUrlFromDatabase(ORGANIC_INSTALL,null) // загрузка сырой ссылки
+                firestore.getUrlFromDatabase(ORGANIC_INSTALL,null,applicationContext.packageName) // загрузка сырой ссылки
             }
         }
     }

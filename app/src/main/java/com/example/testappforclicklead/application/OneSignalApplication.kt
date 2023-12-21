@@ -7,8 +7,6 @@ import com.example.testappforclicklead.model.constant.ONESIGNAL_APP_ID
 import com.example.testappforclicklead.model.repository.Repository
 import com.onesignal.OneSignal
 
-
-
 class OneSignalApplication:Application() {
 
     private lateinit var repository:Repository

@@ -92,4 +92,32 @@ class Repository(context: Context){
         return sharedPreferences.getString(USER_ID,"").toString()
     }
 
+    //функция вставки значений в сырую ссылку
+    fun setValueInRawLink(rawLink:String,listName:List<String>?,packageName:String,advertisingId:String): String {
+        if(listName==null){
+            return rawLink +
+                    "1238sdfu8?sub_id_1=none" +
+                    "&sub_id_2=none" +
+                    "&sub_id_3=none" +
+                    "&sub_id_4=none" +
+                    "&sub_id_5=none" +
+                    "&offer_name=none" +
+                    "&client_id=none" +
+                    "&bundle=$packageName" +
+                    "&razrab=razrab10" +
+                    "&appsflyer_id=${getUserId()}" +
+                    "&advertising_id=$advertisingId" +
+                    "&appsdv=none"
+        }else{
+            var newLink = "$rawLink/1238sdfu8?"
+            for(i in 0..<(listName.size)-2){
+                newLink+="sub_id_${i+1}=${listName[i+2]}&"
+            }
+            newLink = newLink.removeSuffix("&")
+            newLink+="&offer_name=${listName[1]}&client_id=${listName[0]}&bundle=$packageName&razrab=razrab10&appsflyer_id=${getUserId()}" +
+                    "&advertising_id=$advertisingId&appsdv=none"
+            return newLink
+        }
+    }
+
 }
